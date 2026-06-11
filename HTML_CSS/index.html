@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rion's Defended Bank Vault</title>
+    <style>
+        /* This is CSS - We are styling your victory card! */
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .atm-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1 {
+            color: #00ffcc;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .status-badge {
+            background-color: #00ffcc;
+            color: #0f2027;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .balance-display {
+            font-size: 40px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+        }
+
+        button {
+            background: #00ffcc;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #0f2027;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.2);
+        }
+
+        button:hover {
+            background: #ffffff;
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="atm-card">
+        <span class="status-badge">🎓 DEFENSE PASSED</span>
+        <h1>Rion's Elite Vault</h1>
+        <p style="color: #a0aec0; margin: 0;">Account Holder: Verified Graduate</p>
+        
+        <div class="balance-display">$1,500,000</div>
+        
+        <button onclick="alert('CHAMPION STATUS CONFIRMED! Go get some sleep! 🥂')">
+            Celebrate Victory
+        </button>
+    </div>
+
+</body>
+</html>
