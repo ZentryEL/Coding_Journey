@@ -79,14 +79,42 @@
     <div class="atm-card">
         <span class="status-badge">🎓 DEFENSE PASSED</span>
         <h1>Rion's Elite Vault</h1>
-        <p style="color: #a0aec0; margin: 0;">Account Holder: Verified Graduate</p>
+        <p id = "user-display" style="color: #a0aec0; margin: 0;">Account Holder: Loading...</p>
         
-        <div class="balance-display">$1,500,000</div>
+        <div id = "balance-display" class="balance-display">$0</div>
         
-        <button onclick="alert('CHAMPION STATUS CONFIRMED! Go get some sleep! 🥂')">
+        <button onclick="executeCelebration()"> 
             Celebrate Victory
         </button>
     </div>
+<script>
+    // 🏦 Part 1: Your Bank Database (Object from Day 6)
+    const bankAccount = {
+        accountHolder: "Rion, Certified Graduate",
+        balance: 1500,
+    };
+    // 🎭 Part 2: DOM Manipulation (Pulling the strings!)
+   function updateWebScreen() {
+        // 1. Grab the user element and change its text content to our object data
+        document.getElementById("user-display").textContent = "Account Holder: " + bankAccount.accountHolder;
 
+        // 2. Grab the balance element and change its text content dynamically
+        document.getElementById("balance-display").textContent = "$" + bankAccount.balance;
+    }
+
+    // ⚡ Part 3: The Interaction Trigger
+    function executeCelebration() {
+        // Increase the balance by a graduation bonus!
+        bankAccount.balance += 500;
+
+        // Tell the screen to update its visual display with the new data!
+        updateWebScreen();
+
+        alert ("🎉 Celebration Bonus Added! Total updated live on screen!")
+    }
+
+    // Run this function immediately when the webpage loads for the first time
+    updateWebScreen();
+</script>
 </body>
 </html>
