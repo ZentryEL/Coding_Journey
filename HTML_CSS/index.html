@@ -99,11 +99,14 @@
         </div>
     </div>
 <script>
-    // 🏦 Part 1: Your Fortified Bank Database
-    const bankAccount = {
+    // 🛠️ Look in the browser vault to see if saved account data already exists
+    const savedData = localStorage.getItem("rionBankAccount");
+
+    // Ternary operator or If-statement: If data exists, parse it! If not, use our default values.
+    let bankAccount = savedData ? JSON.parse(savedData) : {
         accountHolder: "Rion, Certified Graduate",
         balance: 1500,
-        transactions: [] // Holding history objects: { type: "Deposit", amount: 500 }
+        transactions: []
     };
 
     // 🧾 Part 2: The Audit Logger (Your Hand-Typed Logic from Day 6!)
@@ -159,6 +162,8 @@
         logTransaction("Deposit", depositAmount);
         
         updateWebScreen(); // Apply updates visually
+        // Add this line right before inputField.value = ""; inside BOTH handle functions!
+        saveToLocalStorage();
         inputField.value = ""; // Zero-out the input box for the next run
     }
 
@@ -181,7 +186,14 @@
         logTransaction("Withdrawal", withdrawAmount);
         
         updateWebScreen();
+        // Add this line right before inputField.value = ""; inside BOTH handle functions!
+        saveToLocalStorage();
         inputField.value = "";
+    }
+    // 🗄️ The Save Spell
+    function saveToLocalStorage() {
+        // Translate our object to a string string and lock it in the browser storage
+        localStorage.setItem("rionBankAccount", JSON.stringify(bankAccount));
     }
 
     // Initialization Sequence
