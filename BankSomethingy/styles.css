@@ -65,4 +65,56 @@
             box-shadow: 0 5px 20px rgba(255, 255, 255, 0.4);
             transform: translateY(-2px);
         }
+        
+        /* 🆕 DAY 15: FLEXBOX LAYOUT CONSTRUCTS */
+
+        /* The wrapper container for your inputs and actions */
+        .control-panel {
+            margin-bottom: 20px;
+          display: flex;
+           flex-direction: column;
+            align-items: center;
+        }
+
+        /* Turns button rows into perfectly spaced, wrap-around lines */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .forex-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap; /* Allows buttons to cleanly drop to a new line if the screen is small! */
+            margin-top: 10px;
+        }
+
+        /* Stylized interactive input slot */
+        .atm-input {
+            width: 80%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .atm-input:focus {
+            border-color: #00ffcc; /* Glows neon when the user clicks inside to type! */
+        }
+
+        /* Secondary small layout look for forex buttons */
+        .btn-secondary {
+            background: #a0aec0;
+            color: #0f2027;
+            padding: 8px 12px;
+            font-size: 13px;
+            flex: 1; /* Makes all buttons expand to fill the available space evenly! */
+        }
   

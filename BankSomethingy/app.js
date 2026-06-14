@@ -124,13 +124,10 @@ async function convertCurrency(targetCurrency) {
             return;
         }
 
-        // 5. Do the live math!
-        const convertedBalance = (currentBalanceUSD * conversionRate).toFixed(2);
-
         // To this pro configuration:
         const convertedBalance = (currentBalanceUSD * conversionRate).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
         });
         
         // 6. Map symbol indicators for the screen decoration

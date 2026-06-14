@@ -9,19 +9,28 @@
 </head>
 <body>
 
-    <div class="atm-card">
+   <div class="atm-card">
         <span class="status-badge">🎓 DEFENSE PASSED</span>
         <h1 id="user-display">Account Holder: Loading...</h1>
         
         <div id="balance-display" class="balance-display">$0</div>
         
-        <div style="margin-bottom: 20px;">
-            <input type="number" id="amount-input" placeholder="Enter amount ($)" 
-                   style="width: 80%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.2); color: white; text-align: center; font-size: 16px; margin-bottom: 15px;">
+        <div class="control-panel">
+            <input type="number" id="amount-input" placeholder="Enter amount ($)" class="atm-input">
             
-            <div style="display: flex; gap: 10px;">
+            <div class="button-group">
                 <button onclick="handleDeposit()" style="background: #00ffcc;">Deposit</button>
                 <button onclick="handleWithdraw()" style="background: #ff4d4d; color: white;">Withdraw</button>
+            </div>
+        </div>
+
+        <div style="margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+            <p style="font-size: 14px; color: #a0aec0; margin-bottom: 5px; text-align: left;">Live Exchange Views:</p>
+            <div class="forex-group">
+                <button onclick="convertCurrency('EUR')" class="btn-secondary">View € EUR</button>
+                <button onclick="convertCurrency('GBP')" class="btn-secondary">View £ GBP</button>
+                <button onclick="convertCurrency('PHP')" class="btn-secondary">View ₱ PHP</button>
+                <button onclick="updateWebScreen()" class="btn-secondary" style="background: #ffffff;">Reset ($)</button>
             </div>
         </div>
 
@@ -29,16 +38,6 @@
             <h3 style="font-size: 16px; color: #a0aec0; margin-bottom: 10px;">Audit History Logs:</h3>
             <ul id="ledger-list" style="list-style: none; padding: 0; margin: 0; font-size: 14px; max-height: 150px; overflow-y: auto;">
                 </ul>
-        </div>
-        
-        <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-            <p style="font-size: 14px; color: #a0aec0; margin-bottom: 10px; text-align: left;">Live Exchange Views:</p>
-            <div style="display: flex; gap: 8px;">
-                <button onclick="convertCurrency('EUR')" style="background: #a0aec0; color: #0f2027; padding: 6px 10px; font-size: 13px;">View € EUR</button>
-                <button onclick="convertCurrency('GBP')" style="background: #a0aec0; color: #0f2027; padding: 6px 10px; font-size: 13px;">View £ GBP</button>
-                <button onclick="convertCurrency('PHP')" style="background: #a0aec0; color: #0f2027; padding: 6px 10px; font-size: 13px;">View ₱ PHP</button>
-                <button onclick="updateWebScreen()" style="background: #ffffff; color: #0f2027; padding: 6px 10px; font-size: 13px;">Reset ($)</button>
-            </div>
         </div>
     </div>
 
