@@ -9,6 +9,8 @@
         transactions: []
     };
 
+    let currentScreenCurrency = "USD";
+
     // 🧾 Part 2: The Audit Logger (Your Hand-Typed Logic from Day 6!)
     function logTransaction(type, amount) {
         bankAccount.transactions.push({ type, amount });
@@ -17,9 +19,12 @@
 
     // 🎭 Part 3: DOM Rendering Master
     function updateWebScreen() {
-        document.getElementById("user-display").textContent = bankAccount.accountHolder;
-        document.getElementById("balance-display").textContent = "$" + bankAccount.balance;
-    }
+    document.getElementById("user-display").textContent = bankAccount.accountHolder;
+    document.getElementById("balance-display").textContent = "$" + bankAccount.balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    
+    // 🆕 Reset the tracking variable securely back to base USD status
+    currentScreenCurrency = "USD";
+}
 
     // 📜 Part 4: Building Dynamic Lists on a Webpage
     function printStatementToScreen() {
@@ -48,6 +53,12 @@
 
     // 💵 Part 5: Core ATM Interactivity Engines
     function handleDeposit() {
+        // 🛡️ Place this block at the very top of BOTH handleDeposit() and handleWithdraw()!
+        if (currentScreenCurrency !== "USD") {
+            alert(`🚨 Action Blocked: You cannot modify funds while viewing a foreign currency conversion (${currentScreenCurrency}). Please click 'Reset ($)' before completing transactions.`);
+            return;
+        }
+
         const inputField = document.getElementById("amount-input");
         const rawValue = inputField.value;
         const depositAmount = Number(rawValue);
@@ -68,6 +79,10 @@
     }
 
     function handleWithdraw() {
+        if (currentScreenCurrency !== "USD") {
+            alert(`🚨 Action Blocked: You cannot modify funds while viewing a foreign currency conversion (${currentScreenCurrency}). Please click 'Reset ($)' before completing transactions.`);
+            return;
+        }
         const inputField = document.getElementById("amount-input");
         const withdrawAmount = Number(inputField.value);
 
@@ -102,6 +117,9 @@ async function convertCurrency(targetCurrency) {
     
     // ⏳ Visual indicator so the user knows the app is thinking
     balanceDisplay.textContent = "Fetching rates...";
+
+    //Tracked View
+    currentScreenCurrency = targetCurrency;
 
     try {
         // 1. Shoot a request across the internet to a live exchange rate API
