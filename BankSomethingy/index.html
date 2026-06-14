@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rion's Defended Bank Vault</title>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="atm-card">
+        <span class="status-badge">🎓 DEFENSE PASSED</span>
+        <h1 id="user-display">Account Holder: Loading...</h1>
+        
+        <div id="balance-display" class="balance-display">$0</div>
+        
+        <div style="margin-bottom: 20px;">
+            <input type="number" id="amount-input" placeholder="Enter amount ($)" 
+                   style="width: 80%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.2); color: white; text-align: center; font-size: 16px; margin-bottom: 15px;">
+            
+            <div style="display: flex; gap: 10px;">
+                <button onclick="handleDeposit()" style="background: #00ffcc;">Deposit</button>
+                <button onclick="handleWithdraw()" style="background: #ff4d4d; color: white;">Withdraw</button>
+            </div>
+        </div>
+
+        <div style="margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; text-align: left;">
+            <h3 style="font-size: 16px; color: #a0aec0; margin-bottom: 10px;">Audit History Logs:</h3>
+            <ul id="ledger-list" style="list-style: none; padding: 0; margin: 0; font-size: 14px; max-height: 150px; overflow-y: auto;">
+                </ul>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
