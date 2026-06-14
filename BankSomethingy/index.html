@@ -30,6 +30,16 @@
             <ul id="ledger-list" style="list-style: none; padding: 0; margin: 0; font-size: 14px; max-height: 150px; overflow-y: auto;">
                 </ul>
         </div>
+        
+        <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+            <p style="font-size: 14px; color: #a0aec0; margin-bottom: 10px; text-align: left;">Live Exchange Views:</p>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="convertCurrency('EUR')" style="background: #a0aec0; color: #0f2027; padding: 6px 10px; font-size: 13px;">View € EUR</button>
+                <button onclick="convertCurrency('GBP')" style="background: #a0aec0; color: #0f2027; padding: 6px 10px; font-size: 13px;">View £ GBP</button>
+                <button onclick="convertCurrency('PHP')" style="background: #a0aec0; color: #0f2027; padding: 6px 10px; font-size: 13px;">View ₱ PHP</button>
+                <button onclick="updateWebScreen()" style="background: #ffffff; color: #0f2027; padding: 6px 10px; font-size: 13px;">Reset ($)</button>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>

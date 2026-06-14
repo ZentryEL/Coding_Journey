@@ -96,5 +96,59 @@
         localStorage.setItem("rionBankAccount", JSON.stringify(bankAccount));
     }
 
+    // 🌐 DAY 14: THE ASYNC FOREX ENGINE
+async function convertCurrency(targetCurrency) {
+    const balanceDisplay = document.getElementById("balance-display");
+    
+    // ⏳ Visual indicator so the user knows the app is thinking
+    balanceDisplay.textContent = "Fetching rates...";
+
+    try {
+        // 1. Shoot a request across the internet to a live exchange rate API
+        // We 'await' the response package before moving to the next line
+        const response = await fetch("https://open.er-api.com/v6/latest/USD");
+        
+        // 2. Unpack the raw text string response into a readable JavaScript Object
+        const data = await response.json();
+
+        // 3. Grab the current user balance from your LocalStorage state
+        const currentBalanceUSD = bankAccount.balance;
+
+        // 4. Dig into the API object to grab the specific conversion rate
+        // Example structure inside 'data.rates': { EUR: 0.92, PHP: 58.20 }
+        const conversionRate = data.rates[targetCurrency];
+
+        if (!conversionRate) {
+            alert("🚨 Error: Currency rate not found.");
+            updateWebScreen(); // Reset back to regular USD display
+            return;
+        }
+
+        // 5. Do the live math!
+        const convertedBalance = (currentBalanceUSD * conversionRate).toFixed(2);
+
+        // To this pro configuration:
+        const convertedBalance = (currentBalanceUSD * conversionRate).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+        });
+        
+        // 6. Map symbol indicators for the screen decoration
+        let symbol = "";
+        if (targetCurrency === "EUR") symbol = "€";
+        if (targetCurrency === "GBP") symbol = "£";
+        if (targetCurrency === "PHP") symbol = "₱";
+
+        // 7. Slam the live updated conversion onto the webpage screen!
+        balanceDisplay.textContent = symbol + convertedBalance + " " + targetCurrency;
+
+    } catch (error) {
+        // Defensive Guard: If the internet drops or the API is down, fail safely!
+        console.error("Forex Error:", error);
+        alert("🚨 Network Timeout: Unable to fetch live currency conversion rates.");
+        updateWebScreen();
+    }
+}
+
     // Initialization Sequence
     updateWebScreen();
