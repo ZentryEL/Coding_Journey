@@ -1,5 +1,10 @@
 // 🛠️ Part 1: State Management & Storage Caching
 const savedData = localStorage.getItem("rionBankAccount");
+// --- DOM REFERENCE NODES ---
+// Grabbing our elements from the HTML tree structure
+const currencySelect = document.getElementById("currency-select");
+const convertBtn = document.getElementById("convert-btn");
+const balanceDisplay = document.getElementById("balance-display");
 
 // Keep your custom bank account object so your LocalStorage data doesn't break!
 let bankAccount = savedData ? JSON.parse(savedData) : {
@@ -128,39 +133,29 @@ async function initializeATM() {
 }
 
 
-// 🌐 UPGRADED CONVERSION ENGINE (No longer uses async/await on every click!)
-function convertCurrency(targetCurrency) {
-    const balanceDisplay = document.getElementById("balance-display");
-
-    // Safety Guard: Check if the network data hasn't arrived yet
-    if (!globalRates[targetCurrency]) {
-        console.log("⏳ Rates are still loading from the mainframe. Standby...");
-        alert("⏳ Exchange rates are still sync'ing. Please try again in a second!");
+// --- REFACTORED INTERACTIVE CONVERSION ---
+function handleUIConversion() {
+    // 1. Read the current dropdown selection value (e.g., "PHP")
+    const selectedCurrency = currencySelect.value;
+    
+    // 2. Safety Guard: Ensure mainframe data has settled
+    if (!globalRates[selectedCurrency]) {
+        balanceDisplay.innerText = "LOADING MAINFRAME...";
         return;
     }
-
-    // Track what currency we are looking at on screen
-    currentScreenCurrency = targetCurrency;
-
-    // Pull the multiplier right out of our pre-cached global box!
-    let multiplier = globalRates[targetCurrency];
-    let converted = bankAccount.balance * multiplier;
     
-    console.log(`Balance in ${targetCurrency}: ${converted.toFixed(2)}`);
-
-    // Map symbol indicators for UI decoration
-    let symbol = "";
-    if (targetCurrency === "EUR") symbol = "€";
-    if (targetCurrency === "GBP") symbol = "£";
-    if (targetCurrency === "PHP") symbol = "₱";
-
-    // Slam the instant conversion right onto the screen!
-    balanceDisplay.textContent = symbol + converted.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }) + " " + targetCurrency;
+    // 3. Extract the real-time rate factor and multiply
+    const rate = globalRates[selectedCurrency];
+    const finalAmount = balance * rate;
+    
+    // 4. INJECT INTO DOM: Format to 2 decimals and light up the screen!
+    balanceDisplay.innerText = `${selectedCurrency} ${finalAmount.toFixed(2)}`;
+    
+    console.log(`📡 UI Render Update: ${selectedCurrency} ${finalAmount.toFixed(2)}`);
 }
-
+// --- EVENT EVENT LISTENER ATTACHMENT ---
+// Instructing the browser to fire our logic the exact moment the button is clicked
+convertBtn.addEventListener("click", handleUIConversion);
 
 // --- BOOT UP THE ENGINE SEQUENCE ---
 updateWebScreen();      // 1. Draw your base USD data to the user layout

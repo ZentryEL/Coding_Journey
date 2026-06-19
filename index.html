@@ -34,6 +34,22 @@
             </div>
         </div>
 
+        <div class="currency-panel">
+            <label for="currency-select">Select Target Mainframe:</label>
+            <select id="currency-select">
+             <option value="PHP">Philippine Peso (PHP)</option>
+                <option value="EUR">Euro (EUR)</option>
+               <option value="GBP">British Pound (GBP)</option>
+               <option value="JPY">Japanese Yen (JPY)</option>
+            </select>
+
+            <button id="convert-btn">Execute Conversion</button>
+
+            <div class="display-container">
+                <p>Converted Balance: <span id="balance-display">--.--</span></p>
+            </div>
+        </div>
+
         <div style="margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; text-align: left;">
             <h3 style="font-size: 16px; color: #a0aec0; margin-bottom: 10px;">Audit History Logs:</h3>
             <ul id="ledger-list" style="list-style: none; padding: 0; margin: 0; font-size: 14px; max-height: 150px; overflow-y: auto;">
