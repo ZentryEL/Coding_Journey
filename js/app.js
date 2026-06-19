@@ -1,169 +1,167 @@
+// 🛠️ Part 1: State Management & Storage Caching
+const savedData = localStorage.getItem("rionBankAccount");
 
-    // 🛠️ Look in the browser vault to see if saved account data already exists
-    const savedData = localStorage.getItem("rionBankAccount");
+// Keep your custom bank account object so your LocalStorage data doesn't break!
+let bankAccount = savedData ? JSON.parse(savedData) : {
+    accountHolder: "Rion, Certified Graduate",
+    balance: 1500,
+    transactions: []
+};
 
-    // Ternary operator or If-statement: If data exists, parse it! If not, use our default values.
-    let bankAccount = savedData ? JSON.parse(savedData) : {
-        accountHolder: "Rion, Certified Graduate",
-        balance: 1500,
-        transactions: []
-    };
+let currentScreenCurrency = "USD";
 
-    let currentScreenCurrency = "USD";
+// 🚀 NEW ASSIGNMENT ADDITION: Global Storage Box for Live Rates
+let globalRates = {}; 
 
-    // 🧾 Part 2: The Audit Logger (Your Hand-Typed Logic from Day 6!)
-    function logTransaction(type, amount) {
-        bankAccount.transactions.push({ type, amount });
-        printStatementToScreen(); // Re-render the visual logs list whenever a transaction happens
-    }
 
-    // 🎭 Part 3: DOM Rendering Master
-    function updateWebScreen() {
+// 🧾 Part 2: The Audit Logger
+function logTransaction(type, amount) {
+    bankAccount.transactions.push({ type, amount });
+    printStatementToScreen(); 
+}
+
+
+// 🎭 Part 3: DOM Rendering Master
+function updateWebScreen() {
     document.getElementById("user-display").textContent = bankAccount.accountHolder;
     document.getElementById("balance-display").textContent = "$" + bankAccount.balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     
-    // 🆕 Reset the tracking variable securely back to base USD status
+    // Reset the tracking variable securely back to base USD status
     currentScreenCurrency = "USD";
 }
 
-    // 📜 Part 4: Building Dynamic Lists on a Webpage
-    function printStatementToScreen() {
-        const ledgerList = document.getElementById("ledger-list");
+
+// 📜 Part 4: Building Dynamic Lists on a Webpage
+function printStatementToScreen() {
+    const ledgerList = document.getElementById("ledger-list");
+    ledgerList.innerHTML = "";
+
+    bankAccount.transactions.forEach((transaction, index) => {
+        const row = document.createElement("li");
         
-        // Clear old visual rows out of the list so we don't repeat entries!
-        ledgerList.innerHTML = "";
-
-        // Loop through the array using .forEach() and construct HTML elements inside the DOM
-        bankAccount.transactions.forEach((transaction, index) => {
-            const row = document.createElement("li");
-            
-            // Set styles conditionally based on transaction type!
-            if (transaction.type === "Deposit") {
-                row.style.color = "#00ffcc";
-                row.textContent = `${index + 1}. 🟢 Deposit: +$${transaction.amount}`;
-            } else {
-                row.style.color = "#ff4d4d";
-                row.textContent = `${index + 1}. 🔴 Withdrawal: -$${transaction.amount}`;
-            }
-            
-            row.style.marginBottom = "8px";
-            ledgerList.appendChild(row); // Attach the new row securely onto the visible list
-        });
-    }
-
-    // 💵 Part 5: Core ATM Interactivity Engines
-    function handleDeposit() {
-        // 🛡️ Place this block at the very top of BOTH handleDeposit() and handleWithdraw()!
-        if (currentScreenCurrency !== "USD") {
-            alert(`🚨 Action Blocked: You cannot modify funds while viewing a foreign currency conversion (${currentScreenCurrency}). Please click 'Reset ($)' before completing transactions.`);
-            return;
+        if (transaction.type === "Deposit") {
+            row.style.color = "#00ffcc";
+            row.textContent = `${index + 1}. 🟢 Deposit: +$${transaction.amount}`;
+        } else {
+            row.style.color = "#ff4d4d";
+            row.textContent = `${index + 1}. 🔴 Withdrawal: -$${transaction.amount}`;
         }
-
-        const inputField = document.getElementById("amount-input");
-        const rawValue = inputField.value;
-        const depositAmount = Number(rawValue);
-
-        // Defensive Guards (From your Copilot session!)
-        if (isNaN(depositAmount) || depositAmount <= 0) {
-            alert("🚨 Transaction Denied: Please enter a valid positive numerical amount.");
-            return;
-        }
-
-        bankAccount.balance += depositAmount;
-        logTransaction("Deposit", depositAmount);
         
-        updateWebScreen(); // Apply updates visually
-        // Add this line right before inputField.value = ""; inside BOTH handle functions!
-        saveToLocalStorage();
-        inputField.value = ""; // Zero-out the input box for the next run
+        row.style.marginBottom = "8px";
+        ledgerList.appendChild(row); 
+    });
+}
+
+
+// 💵 Part 5: Core ATM Interactivity Engines
+function handleDeposit() {
+    if (currentScreenCurrency !== "USD") {
+        alert(`🚨 Action Blocked: You cannot modify funds while viewing a foreign currency conversion (${currentScreenCurrency}). Please click 'Reset ($)' before completing transactions.`);
+        return;
     }
 
-    function handleWithdraw() {
-        if (currentScreenCurrency !== "USD") {
-            alert(`🚨 Action Blocked: You cannot modify funds while viewing a foreign currency conversion (${currentScreenCurrency}). Please click 'Reset ($)' before completing transactions.`);
-            return;
-        }
-        const inputField = document.getElementById("amount-input");
-        const withdrawAmount = Number(inputField.value);
+    const inputField = document.getElementById("amount-input");
+    const depositAmount = Number(inputField.value);
 
-        if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
-            alert("🚨 Transaction Denied: Please enter a valid positive numerical amount.");
-            return;
-        }
-
-        // Insufficient funds handling
-        if (withdrawAmount > bankAccount.balance) {
-            alert(`🚨 Transaction Denied: Insufficient funds for a $${withdrawAmount} withdrawal.`);
-            return;
-        }
-
-        bankAccount.balance -= withdrawAmount;
-        logTransaction("Withdrawal", withdrawAmount);
-        
-        updateWebScreen();
-        // Add this line right before inputField.value = ""; inside BOTH handle functions!
-        saveToLocalStorage();
-        inputField.value = "";
-    }
-    // 🗄️ The Save Spell
-    function saveToLocalStorage() {
-        // Translate our object to a string string and lock it in the browser storage
-        localStorage.setItem("rionBankAccount", JSON.stringify(bankAccount));
+    if (isNaN(depositAmount) || depositAmount <= 0) {
+        alert("🚨 Transaction Denied: Please enter a valid positive numerical amount.");
+        return;
     }
 
-    // 🌐 DAY 14: THE ASYNC FOREX ENGINE
-async function convertCurrency(targetCurrency) {
-    const balanceDisplay = document.getElementById("balance-display");
+    bankAccount.balance += depositAmount;
+    logTransaction("Deposit", depositAmount);
     
-    // ⏳ Visual indicator so the user knows the app is thinking
-    balanceDisplay.textContent = "Fetching rates...";
+    updateWebScreen(); 
+    saveToLocalStorage();
+    inputField.value = ""; 
+}
 
-    //Tracked View
-    currentScreenCurrency = targetCurrency;
+function handleWithdraw() {
+    if (currentScreenCurrency !== "USD") {
+        alert(`🚨 Action Blocked: You cannot modify funds while viewing a foreign currency conversion (${currentScreenCurrency}). Please click 'Reset ($)' before completing transactions.`);
+        return;
+    }
+    const inputField = document.getElementById("amount-input");
+    const withdrawAmount = Number(inputField.value);
 
+    if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
+        alert("🚨 Transaction Denied: Please enter a valid positive numerical amount.");
+        return;
+    }
+
+    if (withdrawAmount > bankAccount.balance) {
+        alert(`🚨 Transaction Denied: Insufficient funds for a $${withdrawAmount} withdrawal.`);
+        return;
+    }
+
+    bankAccount.balance -= withdrawAmount;
+    logTransaction("Withdrawal", withdrawAmount);
+    
+    updateWebScreen();
+    saveToLocalStorage();
+    inputField.value = "";
+}
+
+// 🗄️ Local Storage Saver
+function saveToLocalStorage() {
+    localStorage.setItem("rionBankAccount", JSON.stringify(bankAccount));
+}
+
+
+// 🔌 NEW ASSIGNMENT ADDITION: THE NETWORK MAINFRAME CALL
+// This fires ONCE right when the app loads to background-download all rates
+async function initializeATM() {
     try {
-        // 1. Shoot a request across the internet to a live exchange rate API
-        // We 'await' the response package before moving to the next line
-        const response = await fetch("https://open.er-api.com/v6/latest/USD");
+        console.log("🔌 Connecting to global financial mainframe...");
         
-        // 2. Unpack the raw text string response into a readable JavaScript Object
-        const data = await response.json();
-
-        // 3. Grab the current user balance from your LocalStorage state
-        const currentBalanceUSD = bankAccount.balance;
-
-        // 4. Dig into the API object to grab the specific conversion rate
-        // Example structure inside 'data.rates': { EUR: 0.92, PHP: 58.20 }
-        const conversionRate = data.rates[targetCurrency];
-
-        if (!conversionRate) {
-            alert("🚨 Error: Currency rate not found.");
-            updateWebScreen(); // Reset back to regular USD display
-            return;
-        }
-
-        // To this pro configuration:
-        const convertedBalance = (currentBalanceUSD * conversionRate).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+        let response = await fetch("https://open.er-api.com/v6/latest/USD");
+        let data = await response.json();
         
-        // 6. Map symbol indicators for the screen decoration
-        let symbol = "";
-        if (targetCurrency === "EUR") symbol = "€";
-        if (targetCurrency === "GBP") symbol = "£";
-        if (targetCurrency === "PHP") symbol = "₱";
-
-        // 7. Slam the live updated conversion onto the webpage screen!
-        balanceDisplay.textContent = symbol + convertedBalance + " " + targetCurrency;
-
+        // Note: The assignment says 'data.conversion_rates', but er-api returns 'data.rates'
+        globalRates = data.rates || data.conversion_rates;
+        
+        console.log("✅ Mainframe synced successfully!");
+        console.log("Live PHP Rate is currently:", globalRates.PHP);
     } catch (error) {
-        // Defensive Guard: If the internet drops or the API is down, fail safely!
-        console.error("Forex Error:", error);
-        alert("🚨 Network Timeout: Unable to fetch live currency conversion rates.");
-        updateWebScreen();
+        console.log("❌ Connection failed. Mainframe offline.", error);
     }
 }
 
-    // Initialization Sequence
-    updateWebScreen();
+
+// 🌐 UPGRADED CONVERSION ENGINE (No longer uses async/await on every click!)
+function convertCurrency(targetCurrency) {
+    const balanceDisplay = document.getElementById("balance-display");
+
+    // Safety Guard: Check if the network data hasn't arrived yet
+    if (!globalRates[targetCurrency]) {
+        console.log("⏳ Rates are still loading from the mainframe. Standby...");
+        alert("⏳ Exchange rates are still sync'ing. Please try again in a second!");
+        return;
+    }
+
+    // Track what currency we are looking at on screen
+    currentScreenCurrency = targetCurrency;
+
+    // Pull the multiplier right out of our pre-cached global box!
+    let multiplier = globalRates[targetCurrency];
+    let converted = bankAccount.balance * multiplier;
+    
+    console.log(`Balance in ${targetCurrency}: ${converted.toFixed(2)}`);
+
+    // Map symbol indicators for UI decoration
+    let symbol = "";
+    if (targetCurrency === "EUR") symbol = "€";
+    if (targetCurrency === "GBP") symbol = "£";
+    if (targetCurrency === "PHP") symbol = "₱";
+
+    // Slam the instant conversion right onto the screen!
+    balanceDisplay.textContent = symbol + converted.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " " + targetCurrency;
+}
+
+
+// --- BOOT UP THE ENGINE SEQUENCE ---
+updateWebScreen();      // 1. Draw your base USD data to the user layout
+initializeATM();       // 2. Start downloading exchange rates silently in the background
