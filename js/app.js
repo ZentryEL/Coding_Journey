@@ -1,5 +1,22 @@
 // 🛠️ Part 1: State Management & Storage Caching
 const savedData = localStorage.getItem("rionBankAccount");
+<<<<<<< HEAD
+=======
+
+// --- DOM REFERENCE NODES ---
+// Grabbing our elements from the HTML tree structure
+const userDisplay = document.getElementById("user-display");
+const balanceDisplay = document.getElementById("balance-display");
+const convertedBalanceDisplay = document.getElementById("converted-balance-display");
+const amountInput = document.getElementById("amount-input");
+const currencySelect = document.getElementById("currency-select");
+const depositBtn = document.getElementById("deposit-btn");
+const withdrawBtn = document.getElementById("withdraw-btn");
+const convertBtn = document.getElementById("convert-btn");
+const ledgerList = document.getElementById("ledger-list");
+const forexButtons = document.querySelectorAll('[data-currency]');
+const resetBtn = document.querySelector('.btn-reset');
+>>>>>>> 74cd96585debe3d88ebd0289fcd20fdb685ae56c
 
 // Keep your custom bank account object so your LocalStorage data doesn't break!
 let bankAccount = savedData ? JSON.parse(savedData) : {
@@ -11,7 +28,7 @@ let bankAccount = savedData ? JSON.parse(savedData) : {
 let currentScreenCurrency = "USD";
 
 // 🚀 NEW ASSIGNMENT ADDITION: Global Storage Box for Live Rates
-let globalRates = {}; 
+let globalRates = {};
 
 
 // --- DOM REFERENCE NODES ---
@@ -24,15 +41,24 @@ const balanceDisplay = document.getElementById("balance-display");
 // 🧾 Part 2: The Audit Logger
 function logTransaction(type, amount) {
     bankAccount.transactions.push({ type, amount });
-    printStatementToScreen(); 
+    printStatementToScreen();
 }
 
 
 // 🎭 Part 3: DOM Rendering Master
 function updateWebScreen() {
+<<<<<<< HEAD
     document.getElementById("user-display").textContent = bankAccount.accountHolder;
     balanceDisplay.textContent = "$" + bankAccount.balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     
+=======
+    userDisplay.textContent = bankAccount.accountHolder;
+    balanceDisplay.textContent = "$" + bankAccount.balance.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+
+>>>>>>> 74cd96585debe3d88ebd0289fcd20fdb685ae56c
     // Reset the tracking variable securely back to base USD status
     currentScreenCurrency = "USD";
 }
@@ -40,12 +66,11 @@ function updateWebScreen() {
 
 // 📜 Part 4: Building Dynamic Lists on a Webpage
 function printStatementToScreen() {
-    const ledgerList = document.getElementById("ledger-list");
     ledgerList.innerHTML = "";
 
     bankAccount.transactions.forEach((transaction, index) => {
         const row = document.createElement("li");
-        
+
         if (transaction.type === "Deposit") {
             row.style.color = "#00ffcc";
             row.textContent = `${index + 1}. 🟢 Deposit: +$${transaction.amount}`;
@@ -53,9 +78,9 @@ function printStatementToScreen() {
             row.style.color = "#ff4d4d";
             row.textContent = `${index + 1}. 🔴 Withdrawal: -$${transaction.amount}`;
         }
-        
+
         row.style.marginBottom = "8px";
-        ledgerList.appendChild(row); 
+        ledgerList.appendChild(row);
     });
 }
 
@@ -67,8 +92,7 @@ function handleDeposit() {
         return;
     }
 
-    const inputField = document.getElementById("amount-input");
-    const depositAmount = Number(inputField.value);
+    const depositAmount = Number(amountInput.value);
 
     if (isNaN(depositAmount) || depositAmount <= 0) {
         alert("🚨 Transaction Denied: Please enter a valid positive numerical amount.");
@@ -77,10 +101,10 @@ function handleDeposit() {
 
     bankAccount.balance += depositAmount;
     logTransaction("Deposit", depositAmount);
-    
-    updateWebScreen(); 
+
+    updateWebScreen();
     saveToLocalStorage();
-    inputField.value = ""; 
+    amountInput.value = "";
 }
 
 function handleWithdraw() {
@@ -88,8 +112,8 @@ function handleWithdraw() {
         alert(`🚨 Action Blocked: You cannot modify funds while viewing a foreign currency conversion (${currentScreenCurrency}). Please click 'Reset ($)' before completing transactions.`);
         return;
     }
-    const inputField = document.getElementById("amount-input");
-    const withdrawAmount = Number(inputField.value);
+
+    const withdrawAmount = Number(amountInput.value);
 
     if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
         alert("🚨 Transaction Denied: Please enter a valid positive numerical amount.");
@@ -103,10 +127,10 @@ function handleWithdraw() {
 
     bankAccount.balance -= withdrawAmount;
     logTransaction("Withdrawal", withdrawAmount);
-    
+
     updateWebScreen();
     saveToLocalStorage();
-    inputField.value = "";
+    amountInput.value = "";
 }
 
 // 🗄️ Local Storage Saver
@@ -120,17 +144,17 @@ function saveToLocalStorage() {
 async function initializeATM() {
     try {
         console.log("🔌 Connecting to global financial mainframe...");
-        
-        let response = await fetch("https://open.er-api.com/v6/latest/USD");
-        let data = await response.json();
-        
+
+        const response = await fetch("https://open.er-api.com/v6/latest/USD");
+        const data = await response.json();
+
         // Note: The assignment says 'data.conversion_rates', but er-api returns 'data.rates'
         globalRates = data.rates || data.conversion_rates;
-        
+
         console.log("✅ Mainframe synced successfully!");
         console.log("Live PHP Rate is currently:", globalRates.PHP);
     } catch (error) {
-        console.log("❌ Connection failed. Mainframe offline.", error);
+        console.error("❌ Connection failed. Mainframe offline.", error);
     }
 }
 
@@ -171,12 +195,13 @@ function convertCurrency(targetCurrency) {
 function handleUIConversion() {
     // 1. Read the current dropdown selection value (e.g., "PHP")
     const selectedCurrency = currencySelect.value;
-    
+
     // 2. Safety Guard: Ensure mainframe data has settled
     if (!globalRates[selectedCurrency]) {
-        balanceDisplay.innerText = "LOADING MAINFRAME...";
+        convertedBalanceDisplay.innerText = "LOADING MAINFRAME...";
         return;
     }
+<<<<<<< HEAD
     
     // Track what currency we are looking at on screen to safeguard core ATM functionality
     currentScreenCurrency = selectedCurrency;
@@ -185,12 +210,20 @@ function handleUIConversion() {
     const rate = globalRates[selectedCurrency];
     const finalAmount = bankAccount.balance * rate;
     
+=======
+
+    // 3. Extract the real-time rate factor and multiply
+    const rate = globalRates[selectedCurrency];
+    const finalAmount = bankAccount.balance * rate;
+
+>>>>>>> 74cd96585debe3d88ebd0289fcd20fdb685ae56c
     // 4. INJECT INTO DOM: Format to 2 decimals and light up the screen!
-    balanceDisplay.innerText = `${selectedCurrency} ${finalAmount.toFixed(2)}`;
-    
+    convertedBalanceDisplay.innerText = `${selectedCurrency} ${finalAmount.toFixed(2)}`;
+
     console.log(`📡 UI Render Update: ${selectedCurrency} ${finalAmount.toFixed(2)}`);
 }
 
+<<<<<<< HEAD
 
 // --- EVENT LISTENER ATTACHMENT ---
 // Instructing the browser to fire our logic the exact moment the button is clicked
@@ -198,5 +231,63 @@ convertBtn.addEventListener("click", handleUIConversion);
 
 
 // --- BOOT UP THE ENGINE SEQUENCE ---
+=======
+// --- QUICK CURRENCY CONVERSION (Forex Buttons) ---
+function handleQuickConversion(currency) {
+    if (!globalRates[currency]) {
+        alert("Exchange rates not loaded. Please try again in a moment.");
+        return;
+    }
+
+    const rate = globalRates[currency];
+    const convertedAmount = bankAccount.balance * rate;
+    balanceDisplay.textContent = `${currency} ${convertedAmount.toFixed(2)}`;
+    currentScreenCurrency = currency;
+
+    console.log(`💱 Quick conversion to ${currency}: ${convertedAmount.toFixed(2)}`);
+}
+
+// --- RESET TO USD ---
+function handleReset() {
+    updateWebScreen();
+    console.log("🔄 Reset to USD");
+}
+
+
+// ========================================
+// 🎛️ EVENT LISTENER ATTACHMENT (No more onclick!)
+// ========================================
+
+// Transaction buttons
+depositBtn.addEventListener("click", handleDeposit);
+withdrawBtn.addEventListener("click", handleWithdraw);
+
+// Conversion buttons
+convertBtn.addEventListener("click", handleUIConversion);
+
+// Forex quick view buttons (using data-currency attribute)
+forexButtons.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        const currency = e.target.dataset.currency;
+        handleQuickConversion(currency);
+    });
+});
+
+// Reset button
+resetBtn.addEventListener("click", handleReset);
+
+// Allow Enter key to trigger transactions
+amountInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        // Default to deposit on Enter (optional - you can change this behavior)
+        handleDeposit();
+    }
+});
+
+
+// ========================================
+// 🚀 BOOT UP THE ENGINE SEQUENCE
+// ========================================
+>>>>>>> 74cd96585debe3d88ebd0289fcd20fdb685ae56c
 updateWebScreen();      // 1. Draw your base USD data to the user layout
-initializeATM();       // 2. Start downloading exchange rates silently in the background
+initializeATM();        // 2. Start downloading exchange rates silently in the background
